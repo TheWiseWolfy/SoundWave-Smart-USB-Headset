@@ -1,0 +1,37 @@
+{
+    "filetype": "modustoolbox-ml-configurator",
+    "model": {
+        "framework": "KERAS",
+        "optimization": "SIZE",
+        "path": "../../Downloads/model.h5",
+        "quantization": {
+            "float32": true,
+            "int16x16": true,
+            "int16x8": true,
+            "int8x8": true
+        }
+    },
+    "name": "SMART_WAVE",
+    "output_dir": "mtb_ml_gen",
+    "target": "CY8C62xA",
+    "validation": {
+        "feat_col_count": 1,
+        "feat_col_first": 0,
+        "inputFormat": "JPEG",
+        "inputType": "PRNG",
+        "max_samples": 1000,
+        "path": "",
+        "quantization": {
+            "float32": true,
+            "int16x16": true,
+            "int16x8": true,
+            "int8x8": true
+        },
+        "target": {
+            "target_quantization": "float"
+        },
+        "target_col_count": 1,
+        "target_col_first": 0
+    },
+    "version": 2
+}

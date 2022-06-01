@@ -1,0 +1,34 @@
+{
+    "normal" :
+    {
+        "acc_flt": 0.980000,
+        "acc_int16x16": 0.980000,
+        "mae_int16x16": 1.000000,
+        "acc_int16x8": 0.980000,
+        "mae_int16x8": 1.000000,
+        "acc_int8x16": 0.980000,
+        "mae_int8x16": 1.000000,
+        "acc_int8x8": 0.980000,
+        "mae_int8x8": 1.000000
+    },
+    "basic" :
+    {
+        "acc_flt": 0.980000,
+        "acc_int16x16": 0.980000,
+        "mae_int16x16": 1.000000,
+        "acc_int16x8": 0.980000,
+        "mae_int16x8": 1.000000,
+        "acc_int8x16": 0.980000,
+        "mae_int8x16": 1.000000,
+        "acc_int8x8": 0.980000,
+        "mae_int8x8": 1.000000
+    },
+    "scratch_memory" :
+    {
+        "scratch_memory_flt": "999 kB",
+        "scratch_memory_int16x16": "999 kB",
+        "scratch_memory_int16x8": "999 kB",
+        "scratch_memory_int8x16": "999 kB",
+        "scratch_memory_int8x8": "999 kB"
+    }
+}
