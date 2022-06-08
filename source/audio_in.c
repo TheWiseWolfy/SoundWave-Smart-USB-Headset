@@ -211,14 +211,16 @@ void audio_in_endpoint_callback(USBFS_Type *base,
 
         for(size_t i = temp_recorded_size ; i < temp_recorded_size + audio_in_count && i < AI_BUFFER_SIZE; i++){
 
-        	uint32 sound = (audio_in_pcm_buffer[j] <<24) +
+        	int32 sound = (audio_in_pcm_buffer[j] <<24) +
 							(audio_in_pcm_buffer[j + 1]<<16) +
 							(audio_in_pcm_buffer[j + 2]<<8) +
 							audio_in_pcm_buffer[j + 3];
 
+        	sound = sound - 2147483647;
 
+        	float magic = sound / 2147483647.0f;
 
-        	data_feed[i] = sound_normalization ((float)sound);
+        	data_feed[i] = magic;
         	//data_feed[i]= (float)sound;
         	j+=4;
         }
