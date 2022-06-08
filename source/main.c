@@ -7,6 +7,8 @@
 #include "audio_out.h"
 #include "audio_in.h"
 #include "touch.h"
+#include "ai.h"
+
 //#include "ai.h"
 
 #include "rtos.h"
@@ -67,13 +69,13 @@ int main(void)
                 RTOS_STACK_DEPTH, NULL, RTOS_TASK_PRIORITY,
                 &rtos_audio_out_task);
 
-    xTaskCreate(touch_process, "Touch Task",
+   xTaskCreate(touch_process, "Touch Task",
                 RTOS_STACK_DEPTH, NULL, RTOS_TASK_PRIORITY,
                 &rtos_touch_task);
 
-  ///  xTaskCreate( ai_process, "Ai Task",
-   //             RTOS_STACK_DEPTH, NULL, RTOS_TASK_PRIORITY,
-   //             &rtos_ai_task);
+    xTaskCreate(ai_process, "Ai Task",
+    			RTOS_STACK_DEPTH, NULL, RTOS_TASK_PRIORITY,
+               &rtos_ai_task);
 
 
     /* Create RTOS Event Group */
@@ -99,8 +101,17 @@ void vApplicationIdleHook( void )
     cyhal_system_sleep();
 }
 
+void vApplicationDaemonTaskStartupHook(void)
+{
+    /* Initializes the inference engine */
+    cy_rslt_t result;
 
-
-
+    result = ai_init();
+    if(CY_RSLT_SUCCESS != result)
+    {
+        /* Reset the system on sensor fail */
+        NVIC_SystemReset();
+    }
+}
 
 /* [] END OF FILE */

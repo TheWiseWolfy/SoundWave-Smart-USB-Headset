@@ -73,7 +73,7 @@ VERBOSE=
 NN_TYPE=float
 
 # Model Name to be loaded to the firmware
-NN_MODEL_NAME="TEST_MODEL"
+NN_MODEL_NAME="SMART_WAVE"
 
 # Folder name containing the model and regression data
 NN_MODEL_FOLDER=./mtb_ml_gen
@@ -96,6 +96,7 @@ COMPONENTS=CUSTOM_DESIGN_MODUS FREERTOS
 ifeq ($(TARGET), $(filter $(TARGET), CY8CKIT-062-WIFI-BT CY8CKIT-062S2-43012 CYW9P62S1-43012EVB-01 CYW9P62S1-43438EVB-01))
   COMPONENTS+=AK4954A
 endif
+ COMPONENTS+=ML_FLOAT32
 
 
 # Like COMPONENTS, but disable optional code that was enabled by default.

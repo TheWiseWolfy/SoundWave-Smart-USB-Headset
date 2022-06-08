@@ -30,6 +30,9 @@
 /*******************************************************************************
 * Global Variables
 ********************************************************************************/
+uint volume_value = 0;
+
+
 uint8_t  audio_app_control_report;
 uint32_t audio_app_current_sample_rate;
 int8_t   audio_app_volume;
@@ -203,7 +206,7 @@ void audio_app_process(void *arg)
 
             /* Convert to Codec Volume */
             audio_app_update_codec_volume();
-           // mtb_wm8960_adjust_heaphone_output_volume(0x20);
+            //mtb_wm8960_adjust_heaphone_output_volume(0x20);
 
             /* Set sync bit */
             xEventGroupSetBits(rtos_events, RTOS_EVENT_SYNC);
@@ -242,15 +245,17 @@ void audio_app_update_codec_volume(void)
  *        Mute: (0x00~0x2F)
  	 */
 
+	// ulong usbVolume = abs( (int8_t)usb_comm_cur_volume[1]  +128  ) ;
+	// uint output = 48u + ( usbVolume / (float)255u * 79u);
+
 	 uint output = 0;
+	 if( audio_app_prev_volume != volume_value ){
+	     audio_app_prev_volume = volume_value;
 
-	 ulong usbVolume = abs( (int8_t)usb_comm_cur_volume[1]  +128  ) ;
-
-	 output = 48u + ( usbVolume / (float)255u * 79u);
-
-	 if( audio_app_prev_volume != output ){
-
-        audio_app_prev_volume = output;
+		 output = volume_value;
+		 if(volume_value < 60){
+			 output = 60;
+		 }
     	mtb_wm8960_adjust_heaphone_output_volume(output);
     }
 }

@@ -11,6 +11,8 @@
 
 #include "cy_device_headers.h"
 
+#include "ai.h"
+
 /*******************************************************************************
 * Local Functions
 *******************************************************************************/
@@ -163,6 +165,13 @@ void audio_in_update_sample_rate(uint32_t sample_rate)
     audio_in_frame_size = 2 * (sample_rate / 1000);
 }
 
+float stop = 4294967295;
+float start = 0;
+
+float sound_normalization(float sound){
+	return (sound - start) / (stop - start);
+}
+
 /*******************************************************************************
 * Function Name: audio_in_endpoint_callback
 ********************************************************************************
@@ -197,6 +206,25 @@ void audio_in_endpoint_callback(USBFS_Type *base,
         }
 
         //Iuli magic
+    	size_t j = 0;
+    	size_t temp_recorded_size = recorded_size;
+
+        for(size_t i = temp_recorded_size ; i < temp_recorded_size + audio_in_count && i < AI_BUFFER_SIZE; i++){
+
+        	uint32 sound = (audio_in_pcm_buffer[j] <<24) +
+							(audio_in_pcm_buffer[j + 1]<<16) +
+							(audio_in_pcm_buffer[j + 2]<<8) +
+							audio_in_pcm_buffer[j + 3];
+
+
+
+        	data_feed[i] = sound_normalization ((float)sound);
+        	//data_feed[i]= (float)sound;
+        	j+=4;
+        }
+
+      //  We remember how much we wrote
+        recorded_size += audio_in_count;
 
         /* Convert the I2S data array (32-bit) to USB data array (24-bit) */
         convert_32_to_24_array(audio_in_pcm_buffer, audio_in_usb_buffer, audio_in_count);
