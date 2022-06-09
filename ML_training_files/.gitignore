@@ -1,0 +1,4 @@
+.vscode
+.conda_envs_dir_test
+.ipynb_checkpoints
+env_*
