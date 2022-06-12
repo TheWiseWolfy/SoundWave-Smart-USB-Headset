@@ -238,6 +238,9 @@ void audio_app_clock_init(void)
 *******************************************************************************/
 void audio_app_update_codec_volume(void)
 {
+    uint8_t touch_audio_control_status = 0;
+    cy_en_usb_dev_ep_state_t epState;
+
     /*
      Steps of 1dB, where:
  *        Minimum volume: -73dB (0x30)
@@ -245,19 +248,50 @@ void audio_app_update_codec_volume(void)
  *        Mute: (0x00~0x2F)
  	 */
 
-	// ulong usbVolume = abs( (int8_t)usb_comm_cur_volume[1]  +128  ) ;
-	// uint output = 48u + ( usbVolume / (float)255u * 79u);
+    //Windows conversion calculation
+	 ulong usbVolume = abs( (int8_t)usb_comm_cur_volume[1]  +128  ) ;
+	 uint windows_output = 48u + ( usbVolume / (float)255u * 79u);
 
-	 uint output = 0;
-	 if( audio_app_prev_volume != volume_value ){
-	     audio_app_prev_volume = volume_value;
 
-		 output = volume_value;
-		 if(volume_value < 60){
-			 output = 60;
-		 }
-    	mtb_wm8960_adjust_heaphone_output_volume(output);
-    }
+	 //Change codec volume
+	 	 uint output = 0;
+	 	if( audio_app_prev_volume != volume_value ){
+	 	     audio_app_prev_volume = volume_value;
+
+	 		 output = volume_value;
+	 		 if(volume_value < 80){
+	 			 output = 80;
+	 		 }
+	     	mtb_wm8960_adjust_heaphone_output_volume(output);
+	    }
+
+
+	 //Nebunie
+	 if(windows_output < output ){
+		    touch_audio_control_status = AUDIO_HID_REPORT_VOLUME_UP;
+	 }
+	 else if(windows_output > output ){
+		    touch_audio_control_status = AUDIO_HID_REPORT_VOLUME_DOWN;
+	 }
+	//Change windows volume
+
+
+	 if(abs(windows_output - output ) > 5 && touch_audio_control_status != 0){
+		epState = Cy_USBFS_Dev_Drv_GetEndpointState(CYBSP_USBDEV_HW, AUDIO_HID_ENDPOINT, &usb_drvContext);
+
+		/* Check that endpoint is ready for operation */
+		if ((CY_USB_DEV_EP_IDLE == epState) || (CY_USB_DEV_EP_COMPLETED == epState))
+		{
+			audio_app_control_report = touch_audio_control_status;
+
+			/* Send out report data */
+			Cy_USB_Dev_WriteEpNonBlocking(AUDIO_HID_ENDPOINT,
+				  &audio_app_control_report,
+				  AUDIO_HID_REPORT_SIZE,
+				  &usb_devContext);
+		}
+	 }
+
 }
 
 /*******************************************************************************

@@ -1,7 +1,7 @@
 {
     "headroom_weights": 6,
     "key_model": "SMART_WAVE",
-    "load_model": "C:/Users/Lucian/Desktop/Ai/final/SmartWave.h5",
+    "load_model": "C:/Users/Lucian/Desktop/SmartWave.h5",
     "max_samples": 1000,
     "random_input": 1,
     "run_mode": "deploy"

@@ -3,7 +3,7 @@
     "model": {
         "framework": "KERAS",
         "optimization": "SIZE",
-        "path": "../../Desktop/Ai/final/SmartWave.h5",
+        "path": "../../Desktop/SmartWave.h5",
         "quantization": {
             "float32": true,
             "int16x16": true,

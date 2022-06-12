@@ -71,9 +71,9 @@ void ai_process(void *arg){
 
    // printf("%d", model_output_size);
 
-    //for(int i = 0; i < AI_BUFFER_SIZE; i++){
-    //	data_feed[i]=0;
-   // }
+    for(int i = 0; i < AI_BUFFER_SIZE; i++){
+    	data_feed[i]=0;
+    }
 
 	for(;;){
         /* Feed the Beast */
